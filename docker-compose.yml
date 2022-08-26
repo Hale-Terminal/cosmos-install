@@ -1,0 +1,26 @@
+version: '3.4'
+services:
+  core:
+    image: cosmos-local
+    env_file:
+      - .env
+    build:
+      context: https://github.com/Hale-Terminal/cosmos.git#latest
+  api:
+    restart: always
+    image: cosmos-local
+    depends_on:
+      - core
+    env_file:
+      - .env
+    command: ["start", "api"]
+    ports:
+      - "8000:8000"
+  monitor:
+    restart: always
+    image: cosmos-local
+    depends_on:
+      - core
+    env_file:
+      - .env
+    command: ["start", "monitor"]
