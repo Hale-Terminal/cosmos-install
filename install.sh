@@ -37,9 +37,6 @@ function fill_uninitialised_secret {
     secret_name=$1
     if [ -z ${!secret_name} ] || [ ${!secret_name} == "REPLACEWITHSOMETHIINGSECRET" ]; then
         echo "Generating ${secret_name}..."
-        declare ${secret_name}=$(openssl rand -hex 30)
-        sed $sed_suffix_arg "s/^${secret_name}=.*/${secret_name}=${!secret_name}/" $DISPATCH_CONFIG_ENV
-        echo "${secret_name} written to $DISPATCH_CONFIG_ENV"
     else
         echo "Leaving existing ${secret_name}..."
     fi
@@ -79,12 +76,6 @@ echo "Docker images pulled and built."
 echo ""
 echo "Setting up database..."
 
-echo "Running standard database migrations..."
-
-echo ""
-echo "Installing plugins..."
-docker-compose run --rm api
-cleanup
 echo ""
 echo "----------------"
 echo "You're all done! Run the following command to get Dispatch running:"
